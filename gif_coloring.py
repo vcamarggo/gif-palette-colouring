@@ -1,10 +1,12 @@
 import numpy as np
 import cv2
 import imageio
+import glob
+import natsort
 
 INIT_COLOR_HUE = 0
-END_COLOR_HUE = 120
-FRAMES =10
+END_COLOR_HUE = 180
+FRAMES =60
 
 HEIGHT= 128
 WIDTH= HEIGHT*2 #O dobro pq vai dar append na altura com a segunda imagem
@@ -42,22 +44,11 @@ for idx in range(FRAMES):
             final_img[i][j] = bgr_indexes[img[i][j]]
             
     cv2.imwrite('result/img-'+str(idx)+'-colored.jpg', final_img)
-    
-
-images = []
-filenames=['result/img-0-colored.jpg',
-           'result/img-1-colored.jpg',
-           'result/img-2-colored.jpg',
-           'result/img-3-colored.jpg',
-           'result/img-4-colored.jpg',
-           'result/img-5-colored.jpg',
-           'result/img-6-colored.jpg',
-           'result/img-7-colored.jpg',
-           'result/img-8-colored.jpg',
-           'result/img-9-colored.jpg']
-for filename in filenames:
+     
+images=[]
+for filename in natsorted(glob.iglob('result/*.jpg'), key=lambda y: y.lower()):
     images.append(imageio.imread(filename))
-imageio.mimsave('result/movie.gif', images)
+imageio.mimsave('result/movie.gif', images, duration=0.2)
 
 def write_palettes():    
     for i in range(180):
